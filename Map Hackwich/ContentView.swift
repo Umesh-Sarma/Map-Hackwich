@@ -25,6 +25,34 @@ struct ContentView: View {
                         coordinate: CLLocationCoordinate2D(
 
                             latitude: 42.15704, longitude: -88.14812))]
+    
+    
+    func findLocation(name: String) {
+
+            locationManager.geocoder.geocodeAddressString(name) { (placemarks, error) in
+
+                guard placemarks != nil else {
+
+                    print("Could not locate \(name)")
+
+                    return
+
+                }
+
+                for placemark in placemarks! {
+
+                    let place = Place(name: "\(placemark.name!), \(placemark.administrativeArea!)",
+
+                                      coordinate: placemark.location!.coordinate)
+
+                    places.append(place)
+
+                }
+
+            }
+
+        }
+
 
     var body: some View {
         VStack {
@@ -47,6 +75,12 @@ struct ContentView: View {
                         }
 
                     }
+            
+                        .onAppear {
+
+                                    findLocation(name: "Springfield")
+
+                                }
         }
     }
 }
